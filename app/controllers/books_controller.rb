@@ -3,10 +3,8 @@ class BooksController < ApplicationController
   before_action :correct_user, only: [:edit, :update]
 
   def create
-    @new_book = Book.new(book_params)
+    @new_book = Book.new
     @books = Book.all
-    @new_book.user_id = current_user.id
-    @user = current_user
     if @new_book.save
       flash[:notice] = "You have creatad book successfully."
       redirect_to book_path(@new_book.id)
