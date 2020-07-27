@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class BooksController < ApplicationController
   before_action :authenticate_user!
-  before_action :correct_user, only: [:edit, :update]
+  before_action :correct_user, only: %i[edit update]
 
   def create
     @new_book = Book.new(book_params)
@@ -8,10 +10,10 @@ class BooksController < ApplicationController
     @new_book.user_id = current_user.id
     @user = current_user
     if @new_book.save
-      flash[:notice] = "You have creatad book successfully."
+      flash[:notice] = 'You have creatad book successfully.'
       redirect_to book_path(@new_book.id)
     else
-      render "index"
+      render 'index'
     end
   end
 
@@ -34,10 +36,10 @@ class BooksController < ApplicationController
   def update
     @book = Book.find(params[:id])
     if @book.update(book_params)
-      flash[:notice] = "You have updated book successfully."
+      flash[:notice] = 'You have updated book successfully.'
       redirect_to book_path(@book.id)
     else
-      render "edit"
+      redirect_to edit_book_path(@book.id)
     end
   end
 
@@ -51,9 +53,7 @@ class BooksController < ApplicationController
 
   def correct_user
     user = Book.find(params[:id]).user
-    if current_user.id != user.id
-      redirect_to books_path
-    end
+    redirect_to books_path if current_user.id != user.id
   end
 
   def book_params
